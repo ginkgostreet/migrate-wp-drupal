@@ -1,0 +1,25 @@
+<?php
+
+require_once('/var/www/ushccdrupal.localhost/utils/env/civicrm_config.DEV.php');
+
+define('DB_DUMP', GSL_PROJ_ROOT.'/dumps/sql.crm');
+define('DATABASE', 'membership_civi');
+define('SITE_DIR', GSL_PROJ_ROOT.'/htdocs/sites/default');
+define('WEBUSER', 'www-data');
+define('GSL_CIVICRM_CONFIG', GSL_PROJ_ROOT.'/utils/env/civicrm_config.DEV.php');
+define('WP_PLUGINS_TAR', GSL_PROJ_ROOT.'/tars/plugins.tar.gz'); // the contents of wp-content/plugins
+
+require_once('/var/www/ushccdrupal.localhost/utils/env/civicrm_config.DEV.php');
+
+if (strpos(DB_DUMP, '.gz') > 0)
+  define('CAT', 'zcat');
+else
+  define('CAT', 'cat');
+
+$extension_archs = array(
+  'biz.jmaconsulting.mte-1.2.tar.gz',
+  'com.sciencegallery.mailchimp-1.0.tar.gz',
+  'eu.tttp.exportexcel.tar.gz',
+  'eu.tttp.setting.tar.gz',
+  'nz.co.fuzion.extendedreport.tar.gz',
+);
