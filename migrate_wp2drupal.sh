@@ -23,12 +23,23 @@ popd
 
 # Installing CiviCRM
 pushd ${PROJ_ROOT}/tars
+sudo rm -r civicrm-4.5.5-drupal.tar.*
 echo "downloading CiviCRM from URL..."
 wget "https://download.civicrm.org/civicrm-4.5.5-drupal.tar.gz"
 popd
 pushd ${PROJ_ROOT}/${WEB_DIR}/sites/all/modules
 sudo tar -zxf ${PROJ_ROOT}/tars/civicrm-4.5.5-drupal.tar.gz
 popd
+
+pushd ${PROJ_ROOT}/${WEB_DIR}/sites/all/modules/civicrm/install
+sudo cp -rf ${PROJ_ROOT}/utils/migrate_wp2drupal/index.php ./
+popd
+
+echo "Giving CiviCRM permissions to write to default directory..."
+sudo setfacl -R -m u:www-data:rwX,d:u:www-data:rwX /var/www/ushccdrupal.localhost/htdocs/sites/default
+
+echo "Enabling CiviCRM using drush..."
+drush en -y civicrm
 
 # Migrating CiviCRM files
 echo "Migrating CiviCRM files from Wordpress to Drupal..."
@@ -38,4 +49,3 @@ echo "Migrating CiviCRM files from Wordpress to Drupal..."
 # Migrating databases
 echo "Migrating Wordpress databases to Drupal..."
 #migrate_civicrm_db.php
-
