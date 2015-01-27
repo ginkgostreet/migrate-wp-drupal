@@ -1,26 +1,26 @@
 ##########
 # CONFIG #
 ##########
-PROJ_NAME=ushccdrupal # needs to match project name in the server script
-PROJ_ROOT=/var/www/${PROJ_NAME}.localhost # full path with no trailing slash, please
+PROJ_ROOT=/var/www # full path with no trailing slash, please -- this is a place we can safely write files
 WEB_DIR=htdocs # relative from PROJ_ROOT with no trailing slash, please
 WEB_GROUP=www-data
 WEB_USER=www-data
 
-MAIN_PROJ_NAME=membership
-CMS_USER=ginkgo
-CMS_PASS=""
-CMS_MYSQL_USER=membership
-CMS_MYSQL_PASS=""
+CMS_USER=admin
+CMS_PASS=
+CRM_VER=4.5.5 # the version of CiviCRM to download and install
+CRM_SITE_URL=
+
+CMS_MYSQL_USER=
+CMS_MYSQL_PASS=
 CMS_MYSQL_HOST=localhost
-CMS_MYSQL_DB=membership_drupal
+CMS_MYSQL_DB=
 
-TERMINAL_GROUP=www-data
-TERMINAL_USER=www-data
+CRM_MYSQL_USER=${CMS_MYSQL_USER}
+CRM_MYSQL_PASS=${CMS_MYSQL_PASS}
+CRM_MYSQL_HOST=${CMS_MYSQL_HOST}
+CRM_MYSQL_DB=
 
-CMS=DRUPAL # please specify DRUPAL or WP
-CMS_DB=${MAIN_PROJ_NAME}_drupal
-CRM_DB=${MAIN_PROJ_NAME}_civi
 ###########
 # /CONFIG #
 ###########
