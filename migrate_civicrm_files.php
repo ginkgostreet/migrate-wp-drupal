@@ -1,29 +1,24 @@
 #!/usr/bin/php
 <?php
 
-require_once('./migrate_civicrm_config.php');
+require_once(__DIR__ . '/migrate_civicrm_config.php');
 
-mkdir('tmp');
-chdir('tmp');
-$tmp_dir = getcwd();
+// there are no extensions to migrate, so there's no step for that here...
 
-system('tar xzf '.WP_PLUGINS_TAR);
+// upload_dir is a full path from server root
+$upload_dir = array_key_exists('uploadDir', $civicrm_setting['Directory Preferences'])
+  ? $civicrm_setting['Directory Preferences']['uploadDir'] : DRUPAL_WEBROOT . '/sites/default/files/civicrm/upload';
+@mkdir($upload_dir); // ensure it exists
+system('cp -a ' . WP_WEBROOT . '/wp-content/plugins/files/civicrm/upload/* ' . $upload_dir);
 
-$ext_dir = $civicrm_setting['Directory Preferences']['extensionsDir'];
+// upload_dir is a full path from server root
+$image_dir = array_key_exists('imageUploadDir', $civicrm_setting['Directory Preferences'])
+  ? $civicrm_setting['Directory Preferences']['imageUploadDir'] : DRUPAL_WEBROOT . '/sites/default/files/civicrm/persist/contribute';
+@mkdir($image_dir); // ensure it exists
+system('cp -a ' . WP_WEBROOT . '/wp-content/plugins/files/civicrm/upload/* ' . $image_dir);
 
-mkdir($ext_dir); // ensure it exists
-chdir($ext_dir);
-foreach ($extension_archs as $arch) {
-  system('tar xzf '.GSL_PROJ_ROOT.'/tars/extensions/'.$arch.' --overwrite');
-}
-
-chdir($tmp_dir.'/files/civicrm/upload');
-foreach ($extension_archs as $arch) {
-  system( 'rm -rf '.str_replace($arch, '.tar.gz', ''));
-}
-chdir($tmp_dir);
-
-system('cp -a files/civicrm/upload/* '.$civicrm_setting['Directory Preferences']['uploadDir']);
-system('cp -a files/civicrm/custom/* '.$civicrm_setting['Directory Preferences']['customFileUploadDir']);
-
-system('rm -rf '.$tmp_dir);
+// custom_dir is a full path from server root
+$custom_dir = array_key_exists('customFileUploadDir', $civicrm_setting['Directory Preferences'])
+  ? $civicrm_setting['Directory Preferences']['customFileUploadDir'] : DRUPAL_WEBROOT . '/sites/default/files/civicrm/custom';
+@mkdir($custom_dir); // ensure it exists
+system('cp -a ' . WP_WEBROOT . '/wp-content/plugins/files/civicrm/custom/* ' . $custom_dir);

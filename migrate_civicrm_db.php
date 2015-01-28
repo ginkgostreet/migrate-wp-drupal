@@ -5,15 +5,8 @@
  * WARNING: does not address database prefixes
  ***/
 
-require_once('./migrate_civicrm_config.php');
-require_once('./functions.php');
-/*
- define('DB_DUMP', 
- define('DATABASE', 
- define('SITE_DIR', 
- define('WEBUSER',
- define('CAT', 
-*/
+require_once(__DIR__ . '/migrate_civicrm_config.php');
+require_once(__DIR__ . '/functions.php');
 
 echo "Migrate civicrm to Drupal\n";
 echo "You need sudo ability to run this script\n";
@@ -22,27 +15,25 @@ user_confirm_or_exit('This script will drop your civicrm database. Continue? [y/
 
 #confirm db connection
   passthru(mymysql('show tables').' >/dev/null 2>/dev/null', $output);
-  if ($output > 0) echo "mysql connection failed, check your .my.cnf\n"; 
+  if ($output > 0) echo "mysql connection failed, check your .my.cnf\n";
 
 echo "Dropping CiviCRM database\n";
 system(mymysql('DROP DATABASE '.DATABASE, '').' -f');
 system(mymysql('CREATE DATABASE '.DATABASE, '').' -f');
 
 echo "Restore db dump\n";
-system(CAT.' '.DB_DUMP.' | mysql '.DATABASE);
+system(CAT . ' ' . DB_DUMP . ' | mysql ' . DATABASE);
 
 echo "Truncate uf_match\n";
 system(mymysql('delete from civicrm_uf_match'));
 
 echo "Update path configs\n";
-chdir(SITE_DIR);
-system('sudo drush civicrm-update-cfg');
-system('sudo chown -R '.WEBUSER.':'.WEBUSER.' files/civicrm');
-system('sudo chmod -R ug+w files');
+system('drush -r ' . DRUPAL_WEBROOT .  ' civicrm-update-cfg');
+system('sudo chown -R ' . WEBUSER . ':' . WEBUSER . ' ' . DRUPAL_WEBROOT . '/sites/default/files/civicrm');
+system('sudo chmod -R ug+w ' . DRUPAL_WEBROOT . '/sites/default/files');
 
 echo "Clearing CiviCRM menu caches to force rebuild.\n";
-system(mymysql('DELETE FROM civicrm_menu'));
-system(mymysql('UPDATE civicrm_domain SET config_backend = NULL WHERE civicrm_domain.id = 1'));
+system('drush -r ' . DRUPAL_WEBROOT .  ' civicrm-api system.flush triggers=1 session=1');
 
 /***
  * create a system mysql query call

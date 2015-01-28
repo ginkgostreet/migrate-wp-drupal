@@ -1,25 +1,23 @@
 <?php
 
-require_once('/var/www/ushccdrupal.localhost/utils/env/civicrm_config.DEV.php');
+/**
+ * This is an example config file, used by migrate_civicrm_files.php and migrate_civicrm_db.php.
+ * In order to use these scripts, copy this file to migrate_civicrm_config.php and edit the
+ * values below.
+ */
 
-define('DB_DUMP', GSL_PROJ_ROOT.'/dumps/sql.crm');
-define('DATABASE', 'membership_civi');
-define('SITE_DIR', GSL_PROJ_ROOT.'/htdocs/sites/default');
+require_once('/usr/local/lib/civicrm-buildkit/build/drupal-clean/sites/default/civicrm.settings.php');
+
+define('DB_DUMP', '/path/to/dumps/sql.crm');
+define('DATABASE', '');
+define('DRUPAL_WEBROOT', $civibuild['WEB_ROOT']); // this default only works if you're using buildkit :-)
 define('WEBUSER', 'www-data');
-define('GSL_CIVICRM_CONFIG', GSL_PROJ_ROOT.'/utils/env/civicrm_config.DEV.php');
-define('WP_PLUGINS_TAR', GSL_PROJ_ROOT.'/tars/plugins.tar.gz'); // the contents of wp-content/plugins
+define('WP_WEBROOT', '/var/www/localhost/htdocs');
 
-require_once('/var/www/ushccdrupal.localhost/utils/env/civicrm_config.DEV.php');
-
-if (strpos(DB_DUMP, '.gz') > 0)
+if (strpos(DB_DUMP, '.gz') > 0) {
   define('CAT', 'zcat');
-else
+} else {
   define('CAT', 'cat');
+}
 
-$extension_archs = array(
-  'biz.jmaconsulting.mte-1.2.tar.gz',
-  'com.sciencegallery.mailchimp-1.0.tar.gz',
-  'eu.tttp.exportexcel.tar.gz',
-  'eu.tttp.setting.tar.gz',
-  'nz.co.fuzion.extendedreport.tar.gz',
-);
+$extension_archs = array();
